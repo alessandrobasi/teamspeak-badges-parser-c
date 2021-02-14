@@ -16,12 +16,14 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     ui.statusBar->showMessage(_statusMsg);
     ui.tabellaBages->setRowCount(numBadges);
     connect(ui.clearCacheBtn, &QPushButton::clicked, this, &TeamspeakBadgesViewer::clearCache);
+    connect(ui.tabellaBages, &QTableWidget::itemSelectionChanged, this, &TeamspeakBadgesViewer::showBadgeInfo);
+    
     int index = 0;
     for each (auto badge in this->badgesInfo) {
-
-        QTableWidgetItem item(this->getBadgeIcon(badge.at(0), badge.at(2)), badge.at(1));
-        item.setData(Qt::UserRole, QVariant(badge));
-        ui.tabellaBages->setItem(index++, 0, &item);
+        QIcon icon_t(this->getBadgeIcon(badge.at(0), badge.at(2))); // get(& download) badge icon
+        QTableWidgetItem* item = new QTableWidgetItem(icon_t, badge.at(1)); // create item for table
+        item->setData(Qt::UserRole, QVariant(badge)); // add data to item
+        ui.tabellaBages->setItem(index++, 0, item); // insert in table
     }
 
 }
@@ -82,11 +84,13 @@ void TeamspeakBadgesViewer::getFile() {
         return;
     }
 
+    QString dataBadges = QString::fromStdString(rawBadges.readAll().toStdString());
+
+    rawBadges.close();
+
     QRegularExpression expr("^\\$(?P<headid>[\\w\\d-]+).(.|\\n)(?P<nome>.+)..(?P<url>https://[\\w\\-\\.\\/]+)..(?P<desc>\\w.*)\\(.+$",
         QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption );
 
-    QString dataBadges = QString::fromStdString(rawBadges.readAll().toStdString());
-        
     QRegularExpressionMatchIterator i = expr.globalMatch(dataBadges);
 
     while (i.hasNext()) {
@@ -103,13 +107,13 @@ void TeamspeakBadgesViewer::getFile() {
 
 }
 
-QIcon TeamspeakBadgesViewer::getBadgeIcon(QString uuid, QString url, QString type) {
+QString TeamspeakBadgesViewer::getBadgeIcon(QString uuid, QString url, QString type) {
     QFile icon("cache/" + uuid + type);
     if (!icon.exists()) {
 
         if (!icon.open(QIODevice::WriteOnly)) {
             qDebug("Error open icon (Write)");
-            return QIcon();
+            return "";
         }
 
         QEventLoop loop;
@@ -133,9 +137,46 @@ QIcon TeamspeakBadgesViewer::getBadgeIcon(QString uuid, QString url, QString typ
         icon.close();
     }
 
-    return QIcon("cache/" + uuid + type);
+    return "cache/" + uuid + type;
+}
+
+void TeamspeakBadgesViewer::showBadgeInfo() {
+
+    QTableWidgetItem* item = ui.tabellaBages->selectedItems().at(0);
+    QVariantList r_badge = item->data(Qt::UserRole).toList();
+
+    QString uuid = r_badge.at(0).toString();
+    QString nome = r_badge.at(1).toString();
+    QString url  = r_badge.at(2).toString();
+    QString desc = r_badge.at(3).toString();
+
+    QPixmap icon(this->getBadgeIcon(uuid, url));
+    ui.iconaBadge->setPixmap(icon);
+    ui.nomeBadge->setText(nome);
+    ui.descBadge->setText(desc);
+    ui.uuidText->setText(uuid);
+
+    ui.svgUrl->setText("SVG: <a href='" + url + ".svg" + "'>[...].svg" + "</a>");
+    ui.detailsSvgUrl->setText("Details SVG: <a href='" + url + "_details.svg" + "'>[...]_details.svg" + "</a>");
+    ui.pngUrl->setText("PNG: <a href='" + url +
+        "_16.png" + "'>[...]_16.png" + "</a>");
+    ui.detailsPngUrl->setText("Details PNG: <a href='" + url + "_64.png" + "'>[...]_64.png" + "</a>");
+
 }
 
 void TeamspeakBadgesViewer::clearCache() {
     qDebug("clicked");
+
+    QDir cache("cache");
+    QFile list("list");
+
+    if (!cache.removeRecursively()) {
+        qDebug("Error cleaning cache dir");
+    }
+
+    if (!list.remove()) {
+        qDebug("Error removing list file");
+    }
+
+    QApplication::quit();
 }

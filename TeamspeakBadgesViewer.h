@@ -15,8 +15,7 @@ private:
     const QString urlBadges = "https://badges-content.teamspeak.com/list";
     QList<QList<QString>> badgesInfo;
     void getFile();
-    QIcon getBadgeIcon(QString uuid, QString url, QString type = "_64.png");
+    QString getBadgeIcon(QString uuid, QString url, QString type = "_64.png");
     void showBadgeInfo();
     void clearCache();
-    void changeScreen();
 };
