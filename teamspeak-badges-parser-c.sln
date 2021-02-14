@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "teamspeak-badges-parser-c", "teamspeak-badges-parser-c.vcxproj", "{BB12AA40-570A-439B-86B4-FAD90158B2DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB12AA40-570A-439B-86B4-FAD90158B2DA}.Debug|x64.ActiveCfg = Debug|x64
+		{BB12AA40-570A-439B-86B4-FAD90158B2DA}.Debug|x64.Build.0 = Debug|x64
+		{BB12AA40-570A-439B-86B4-FAD90158B2DA}.Release|x64.ActiveCfg = Release|x64
+		{BB12AA40-570A-439B-86B4-FAD90158B2DA}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDA0D0DB-8AC4-45D4-A582-ABACB85E25CF}
+	EndGlobalSection
+EndGlobal
