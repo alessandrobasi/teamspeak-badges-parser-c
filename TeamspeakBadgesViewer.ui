@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Teamspeak Bages Parser</string>
+   <string>Teamspeak Bages Parser by alessandrobasi.it</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="tabellaBages">
