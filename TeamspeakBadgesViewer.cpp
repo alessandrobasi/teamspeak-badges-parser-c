@@ -2,13 +2,22 @@
 #include <QDir>
 #include <QTimer>
 #include <QRegularExpression>
+#include <qapplication.h>
 #include "DownloadManager.h"
+#include <QMessageBox>
 
 TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     : QMainWindow(parent)
 {
-    this->getFile();
-    ui.setupUi(this);
+    
+    this->getFile(); // download file "list"
+    
+    if (!QFile("list").exists()) {
+        QMessageBox messageBox;
+        messageBox.critical(parent, "Error", "File 'list' missing");
+        messageBox.setFixedSize(500, 200);
+    }
+    ui.setupUi(this); // show gui
 
     // main Window
     int numBadges = this->badgesInfo.length();
@@ -165,8 +174,7 @@ void TeamspeakBadgesViewer::showBadgeInfo() {
 }
 
 void TeamspeakBadgesViewer::clearCache() {
-    qDebug("clicked");
-
+    
     QDir cache("cache");
     QFile list("list");
 
