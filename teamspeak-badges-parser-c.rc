@@ -61,8 +61,8 @@ IDI_ICON1               ICON                    "icon.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,1,0,0
+ PRODUCTVERSION 1,1,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -79,10 +79,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "alessandrobasi.it"
             VALUE "FileDescription", "Show Teamspeak Badges"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "1.1.0.0"
+            VALUE "InternalName", "Teamspeak Badge Parser"
             VALUE "LegalCopyright", "Copyright (C) 2021"
-            VALUE "ProductName", "Teamspeak badges parser"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "OriginalFilename", "Teamspeak Badge Parser"
+            VALUE "ProductName", "Teamspeak Badge Parser"
+            VALUE "ProductVersion", "1.1.0.0"
         END
     END
     BLOCK "VarFileInfo"
