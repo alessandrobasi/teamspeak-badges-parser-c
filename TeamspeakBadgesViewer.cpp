@@ -18,7 +18,7 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
         messageBox.setFixedSize(500, 200);
     }
     ui.setupUi(this); // show gui
-
+    ui.statusBar->showMessage("Loading...");
     // main Window
     int numBadges = this->badgesInfo.length();
     QString _statusMsg = QString::number(numBadges) + " Medaglie";

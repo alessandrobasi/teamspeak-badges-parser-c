@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Teamspeak Bages Parser by alessandrobasi.it</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="TeamspeakBadgesViewer.qrc">
+    <normaloff>:/icon/icon.ico</normaloff>:/icon/icon.ico</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="tabellaBages">
     <property name="geometry">
@@ -281,6 +285,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="TeamspeakBadgesViewer.qrc"/>
+ </resources>
  <connections/>
 </ui>
