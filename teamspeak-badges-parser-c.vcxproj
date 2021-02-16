@@ -47,19 +47,25 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <ExcludePath>$(ProjectDir)list;$(ExcludePath)</ExcludePath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <ExcludePath>$(ProjectDir)list;$(ExcludePath)</ExcludePath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
     <QtModules>concurrent;core;gui;network;uitools;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
     <QtModules>concurrent;core;gui;network;uitools;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
+    <QtDeploy>true</QtDeploy>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
@@ -92,13 +98,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtUic Include="TeamspeakBadgesViewer.ui" />
-    <QtMoc Include="TeamspeakBadgesViewer.h" />
-    <ClCompile Include="DownloadManager.cpp" />
-    <ClCompile Include="TeamspeakBadgesViewer.cpp" />
+    <QtMoc Include="src\TeamspeakBadgesViewer.h" />
+    <ClCompile Include="src\DownloadManager.cpp" />
+    <ClCompile Include="src\TeamspeakBadgesViewer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="DownloadManager.h" />
+    <QtMoc Include="src\DownloadManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

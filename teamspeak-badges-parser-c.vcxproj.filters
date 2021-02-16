@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TeamspeakBadgesViewer.cpp">
+    <ClCompile Include="src\DownloadManager.cpp">
       <Filter>Sorgenti</Filter>
     </ClCompile>
-    <ClCompile Include="DownloadManager.cpp">
+    <ClCompile Include="src\TeamspeakBadgesViewer.cpp">
       <Filter>Sorgenti</Filter>
     </ClCompile>
   </ItemGroup>
@@ -28,10 +28,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="TeamspeakBadgesViewer.h">
+    <QtMoc Include="src\DownloadManager.h">
       <Filter>Header</Filter>
     </QtMoc>
-    <QtMoc Include="DownloadManager.h">
+    <QtMoc Include="src\TeamspeakBadgesViewer.h">
       <Filter>Header</Filter>
     </QtMoc>
   </ItemGroup>

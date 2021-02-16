@@ -1,4 +1,4 @@
-#include "TeamspeakBadgesViewer.h"
+#include "src/TeamspeakBadgesViewer.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
