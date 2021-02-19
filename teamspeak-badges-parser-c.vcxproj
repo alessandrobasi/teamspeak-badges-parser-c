@@ -55,17 +55,55 @@
     <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile />
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)dll\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <ClCompile />
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)dll\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
-    <QtModules>concurrent;core;gui;network;uitools;widgets</QtModules>
+    <QtModules>core;gui;network;uitools;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
     <QtDeploy>true</QtDeploy>
+    <QMakeExtraArgs>
+    </QMakeExtraArgs>
+    <QMakeCodeLines>
+    </QMakeCodeLines>
+    <QtHeaderSearchPath>
+    </QtHeaderSearchPath>
+    <QtLibrarySearchPath>
+    </QtLibrarySearchPath>
+    <QtRunLUpdateOnBuild>false</QtRunLUpdateOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
-    <QtModules>concurrent;core;gui;network;uitools;widgets</QtModules>
+    <QtModules>core;gui;network;uitools;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
     <QtDeploy>true</QtDeploy>
+    <QMakeExtraArgs>
+    </QMakeExtraArgs>
+    <QMakeCodeLines>
+    </QMakeCodeLines>
+    <QtHeaderSearchPath>
+    </QtHeaderSearchPath>
+    <QtLibrarySearchPath>
+    </QtLibrarySearchPath>
+    <QtRunLUpdateOnBuild>false</QtRunLUpdateOnBuild>
   </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
     <Import Project="$(QtMsBuild)\qt.props" />
