@@ -18,15 +18,15 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
         messageBox.setFixedSize(500, 200);
     }
     ui.setupUi(this); // show gui
+    this->show();
     ui.statusBar->showMessage("Loading...");
     // main Window
     int numBadges = this->badgesInfo.length();
-    QString _statusMsg = QString::number(numBadges) + " Medaglie";
-    ui.statusBar->showMessage(_statusMsg);
+    
     ui.tabellaBages->setRowCount(numBadges);
     connect(ui.clearCacheBtn, &QPushButton::clicked, this, &TeamspeakBadgesViewer::clearCache);
     connect(ui.tabellaBages, &QTableWidget::itemSelectionChanged, this, &TeamspeakBadgesViewer::showBadgeInfo);
-    
+
     int index = 0;
     for each (auto badge in this->badgesInfo) {
         QIcon icon_t(this->getBadgeIcon(badge.at(0), badge.at(2))); // get(& download) badge icon
@@ -34,7 +34,8 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
         item->setData(Qt::UserRole, QVariant(badge)); // add data to item
         ui.tabellaBages->setItem(index++, 0, item); // insert in table
     }
-
+    QString _statusMsg = QString::number(numBadges) + " Medaglie";
+    ui.statusBar->showMessage(_statusMsg);
 }
 
 void TeamspeakBadgesViewer::getFile() {
