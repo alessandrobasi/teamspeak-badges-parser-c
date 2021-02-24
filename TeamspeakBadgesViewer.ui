@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Teamspeak Bages Parser by alessandrobasi.it</string>
+   <string>Teamspeak Badges Parser</string>
   </property>
   <property name="windowIcon">
    <iconset resource="TeamspeakBadgesViewer.qrc">
@@ -46,6 +46,10 @@ background: rgb(32, 47, 130);
 min-height: 1px;
 border: 2px solid white;
 border-radius: 5px;
+}
+
+#centralwidget QLabel a {
+text-decoration: none;
 }</string>
    </property>
    <widget class="QTableWidget" name="tabellaBages">
@@ -108,7 +112,7 @@ border-radius: 5px;
      <bool>false</bool>
     </property>
     <property name="rowCount">
-     <number>11</number>
+     <number>1</number>
     </property>
     <property name="columnCount">
      <number>1</number>
@@ -119,14 +123,14 @@ border-radius: 5px;
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>300</number>
+    </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>300</number>
     </attribute>
     <attribute name="horizontalHeaderHighlightSections">
      <bool>false</bool>
-    </attribute>
-    <attribute name="horizontalHeaderMinimumSectionSize">
-     <number>300</number>
     </attribute>
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>
@@ -134,65 +138,15 @@ border-radius: 5px;
     <attribute name="verticalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>50</number>
+    </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>50</number>
     </attribute>
     <attribute name="verticalHeaderHighlightSections">
      <bool>true</bool>
     </attribute>
-    <attribute name="verticalHeaderMinimumSectionSize">
-     <number>50</number>
-    </attribute>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
-    <row>
-     <property name="text">
-      <string>New Row</string>
-     </property>
-    </row>
     <row/>
     <column/>
    </widget>
@@ -214,202 +168,6 @@ color: white;</string>
     <property name="text">
      <string>Clear Cache</string>
     </property>
-   </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>641</width>
-      <height>481</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">/*background-color: rgb(26, 35, 53);*/</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QFrame" name="frame_3">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>160</y>
-       <width>291</width>
-       <height>261</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(43, 51, 70);
-border-radius: 5px;</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid #1c82cc;
-border-radius: 5px;
-color: white;</string>
-      </property>
-      <property name="text">
-       <string>UUID</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="uuidText">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel::hover{
- border-bottom: 1px solid #1c82cc;
- border-radius: 5px;
-}
-QLabel::!hover{
- border-bottom: 1px solid #48546c;
- border-radius: 5px;
-}</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>100</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid #1c82cc;
-border-radius: 5px;
-color: white;</string>
-      </property>
-      <property name="text">
-       <string>IMG links</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="svgUrl">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>130</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel::hover{
- border-bottom: 1px solid #1c82cc;
- border-radius: 5px;
-}
-QLabel::!hover{
- border-bottom: 1px solid #48546c;
- border-radius: 5px;
-}</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="detailsSvgUrl">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>160</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel::hover{
- border-bottom: 1px solid #1c82cc;
- border-radius: 5px;
-}
-QLabel::!hover{
- border-bottom: 1px solid #48546c;
- border-radius: 5px;
-}</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="pngUrl">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>220</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel::hover{
- border-bottom: 1px solid #1c82cc;
- border-radius: 5px;
-}
-QLabel::!hover{
- border-bottom: 1px solid #48546c;
- border-radius: 5px;
-}</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="detailsPngUrl">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>190</y>
-        <width>271</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel::hover{
- border-bottom: 1px solid #1c82cc;
- border-radius: 5px;
-}
-QLabel::!hover{
- border-bottom: 1px solid #48546c;
- border-radius: 5px;
-}</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </widget>
    </widget>
    <widget class="QFrame" name="frame_2">
     <property name="geometry">
@@ -502,10 +260,226 @@ border-radius: 5px;</string>
      </property>
     </widget>
    </widget>
-   <zorder>frame</zorder>
-   <zorder>tabellaBages</zorder>
-   <zorder>clearCacheBtn</zorder>
-   <zorder>frame_2</zorder>
+   <widget class="QFrame" name="frame_4">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>160</y>
+      <width>291</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(43, 51, 70);
+border-radius: 5px;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="uuid_text">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #1c82cc;
+border-radius: 5px;
+color: white;</string>
+     </property>
+     <property name="text">
+      <string>UUID</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="uuidText">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel::hover{
+ border-bottom: 1px solid #1c82cc;
+ border-radius: 5px;
+}
+QLabel::!hover{
+ border-bottom: 1px solid #48546c;
+ border-radius: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="img_text">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid #1c82cc;
+border-radius: 5px;
+color: white;</string>
+     </property>
+     <property name="text">
+      <string>IMG links</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="svgUrl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel::hover{
+ border-bottom: 1px solid #1c82cc;
+ border-radius: 5px;
+}
+QLabel::!hover{
+ border-bottom: 1px solid #48546c;
+ border-radius: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="detailsSvgUrl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel::hover{
+ border-bottom: 1px solid #1c82cc;
+ border-radius: 5px;
+}
+QLabel::!hover{
+ border-bottom: 1px solid #48546c;
+ border-radius: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="pngUrl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel::hover{
+ border-bottom: 1px solid #1c82cc;
+ border-radius: 5px;
+}
+QLabel::!hover{
+ border-bottom: 1px solid #48546c;
+ border-radius: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="detailsPngUrl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>190</y>
+       <width>271</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel::hover{
+ border-bottom: 1px solid #1c82cc;
+ border-radius: 5px;
+}
+QLabel::!hover{
+ border-bottom: 1px solid #48546c;
+ border-radius: 5px;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="credits">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>430</y>
+      <width>281</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Made by &lt;a href=&quot;https://www.alessandrobasi.it&quot;&gt;&lt;span style=&quot;text-decoration:none; color:#3c76cc;&quot;&gt;alessandrobasi.it&lt;/span&gt;&lt;/a&gt; | UI Made by &lt;a href=&quot;https://www.instagram.com/pingu.io&quot;&gt;&lt;span style=&quot;text-decoration:none; color:#3c76cc;&quot;&gt;@Pingu-Io&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="openExternalLinks">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="toolTip">

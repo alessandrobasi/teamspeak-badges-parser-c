@@ -9,41 +9,50 @@
 TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     : QMainWindow(parent)
 {
-    
+    ui.setupUi(this);
+    this->show(); // show gui
+    ui.statusBar->showMessage("Loading...");
+
+
     this->getFile(); // download file "list"
     
     if (!QFile("list").exists()) {
         QMessageBox messageBox;
         messageBox.critical(parent, "Error", "File 'list' missing");
         messageBox.setFixedSize(500, 200);
+        return;
     }
-    ui.setupUi(this); // show gui
-    this->show();
-    ui.statusBar->showMessage("Loading...");
-    // main Window
-    int numBadges = this->badgesInfo.length();
     
+    
+    // main Window
+
+    // set QTableWidget rows
+    int numBadges = this->badgesInfo.length();
     ui.tabellaBages->setRowCount(numBadges);
+
+    // connect button and slection
     connect(ui.clearCacheBtn, &QPushButton::clicked, this, &TeamspeakBadgesViewer::clearCache);
     connect(ui.tabellaBages, &QTableWidget::itemSelectionChanged, this, &TeamspeakBadgesViewer::showBadgeInfo);
 
     int index = 0;
     for each (auto badge in this->badgesInfo) {
-        QIcon icon_t(this->getBadgeIcon(badge.at(0), badge.at(2))); // get(& download) badge icon
+        QIcon icon_t(this->getBadgeIcon(badge.at(0), badge.at(2))); // get(and download) badge icon
         QTableWidgetItem* item = new QTableWidgetItem(icon_t, badge.at(1)); // create item for table
         item->setData(Qt::UserRole, QVariant(badge)); // add data to item
         ui.tabellaBages->setItem(index++, 0, item); // insert in table
     }
-    QString _statusMsg = QString::number(numBadges) + " Medaglie";
+    // set message to statusbar
+    QString _statusMsg = QString::number(numBadges) + " Badges";
     ui.statusBar->showMessage(_statusMsg);
 }
 
 void TeamspeakBadgesViewer::getFile() {
 
+    // inizialize file and dir for badges
     QDir cache("cache");
     QFile rawBadges("list");
 
-    // creo se non c'è la cartella cache
+    // create cache dir
     if (!cache.exists()) {
         if (!cache.mkpath("cache")) {
             qDebug("Error cache dir creation");
@@ -51,14 +60,23 @@ void TeamspeakBadgesViewer::getFile() {
         }
     }
     
-    // ottengo il tempo attuale e il tempo di modifica del file "list"
+    // get system time and modified time of the file "list"
     QDateTime now = QDateTime::currentDateTime();
-    QDateTime fileT = rawBadges.fileTime(QFileDevice::FileModificationTime);
+    QDateTime fileTime = rawBadges.fileTime(QFileDevice::FileModificationTime);
 
-    qDebug("sysT: %s fileT: %s", qPrintable(now.toString()), qPrintable(fileT.toString()));
-    qDebug(" %d |||||  1 = downloading , 0 = not downloading", now.secsTo(fileT) > 604800 );
-    // controllo se il file non esiste o è vecchio di 7 giorni
-    if (!rawBadges.exists() || now.secsTo(fileT) > 604800) {
+    // True if 
+    //      (file don't exist) OR (file empty) OR (file old than 7 days)
+    bool download = !rawBadges.exists() || rawBadges.size() == 0 || fileTime.secsTo(now) > 604800;
+
+    qDebug("sysTime: %s fileTime: %s diff: %s", 
+        qPrintable(now.toString()), 
+        qPrintable(fileTime.toString()), 
+        qPrintable(QString::number(fileTime.secsTo(now)))
+    );
+    qDebug("downloading? %d ", download);
+
+    // if file must be downloaded
+    if (download) {
         qDebug("Download badge list");
 
         if (!rawBadges.open(QIODevice::WriteOnly)) {
@@ -66,25 +84,12 @@ void TeamspeakBadgesViewer::getFile() {
             return;
         }
 
-        // creo un loop per dare tempo al network di scaricare il file
-        QEventLoop loop;
-        QTimer timeout;
-        timeout.setSingleShot(true);
-        connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit); // avviene in caso di timeout del network
+        QByteArray result = this->_timeoutLoop(this->urlBadges);
 
-        DownloadManager downloadFile(this->urlBadges, this); // avvio il download
-        connect(&downloadFile, SIGNAL(downloaded()), &loop, SLOT(quit())); // avviene quando il file viene scaricato 
-
-        timeout.start(2500);
-        loop.exec(); // loop infito
-
-        if (timeout.isActive()) {
-            timeout.stop();
-            rawBadges.write(downloadFile.downloadedData()); // scrivo su file
+        if (result.size() > 0) {
+            rawBadges.write(result);
         }
-        else {
-            qDebug("Error downloading file (timeout)");
-        }
+        
         rawBadges.close();
     }
 
@@ -94,12 +99,15 @@ void TeamspeakBadgesViewer::getFile() {
         return;
     }
 
-    QString dataBadges = QString::fromStdString(rawBadges.readAll().toStdString());
+    
 
+    QString dataBadges = QString::fromStdString(rawBadges.readAll().toStdString());
+    
     rawBadges.close();
 
     QRegularExpression expr("^\\$(?P<headid>[\\w\\d-]+).(.|\\n)(?P<nome>.+)..(?P<url>https://[\\w\\-\\.\\/]+)..(?P<desc>\\w.*)\\(.+$",
-        QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption );
+        QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption
+    );
 
     QRegularExpressionMatchIterator i = expr.globalMatch(dataBadges);
 
@@ -119,30 +127,17 @@ void TeamspeakBadgesViewer::getFile() {
 
 QString TeamspeakBadgesViewer::getBadgeIcon(QString uuid, QString url, QString type) {
     QFile icon("cache/" + uuid + type);
-    if (!icon.exists()) {
+    if (!icon.exists() || icon.size() == 0) {
 
         if (!icon.open(QIODevice::WriteOnly)) {
             qDebug("Error open icon (Write)");
             return "";
         }
 
-        QEventLoop loop;
-        QTimer timeout;
-        timeout.setSingleShot(true);
-        connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit); // avviene in caso di timeout del network
+        QByteArray result = this->_timeoutLoop(url + type);
 
-        DownloadManager downloadFile(url+type, this); // avvio il download
-        connect(&downloadFile, SIGNAL(downloaded()), &loop, SLOT(quit())); // avviene quando il file viene scaricato 
-
-        timeout.start(2500);
-        loop.exec(); // loop infito
-
-        if (timeout.isActive()) {
-            timeout.stop();
-            icon.write(downloadFile.downloadedData()); // scrivo su file
-        }
-        else {
-            qDebug("Error downloading file (timeout)");
+        if (result.size() > 0) {
+            icon.write(result); // scrivo su file
         }
         icon.close();
     }
@@ -166,11 +161,11 @@ void TeamspeakBadgesViewer::showBadgeInfo() {
     ui.descBadge->setText(desc);
     ui.uuidText->setText(uuid);
 
-    ui.svgUrl->setText("SVG: <a href='" + url + ".svg" + "'>[...].svg" + "</a>");
-    ui.detailsSvgUrl->setText("Details SVG: <a href='" + url + "_details.svg" + "'>[...]_details.svg" + "</a>");
+    ui.svgUrl->setText("SVG: <a href='" + url + ".svg" + "'><span style='text-decoration:none;color:#3c76cc;'>[...].svg" + "</span></a>");
+    ui.detailsSvgUrl->setText("Details SVG: <a href='" + url + "_details.svg" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_details.svg" + "</span></a>");
     ui.pngUrl->setText("PNG: <a href='" + url +
-        "_16.png" + "'>[...]_16.png" + "</a>");
-    ui.detailsPngUrl->setText("Details PNG: <a href='" + url + "_64.png" + "'>[...]_64.png" + "</a>");
+        "_16.png" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_16.png" + "</span></a>");
+    ui.detailsPngUrl->setText("Details PNG: <a href='" + url + "_64.png" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_64.png" + "</span></a>");
 
 }
 
@@ -188,4 +183,30 @@ void TeamspeakBadgesViewer::clearCache() {
     }
 
     QApplication::quit();
+}
+
+//TODO: move to thread
+QByteArray TeamspeakBadgesViewer::_timeoutLoop(QString fileToDownload, int time) {
+
+    // creo un loop per dare tempo al network di scaricare il file
+    QEventLoop loop;
+    QTimer timeout;
+    timeout.setSingleShot(true);
+    connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit); // avviene in caso di timeout del network
+
+    DownloadManager downloadFile(fileToDownload, this); // avvio il download
+    connect(&downloadFile, SIGNAL(downloaded()), &loop, SLOT(quit())); // avviene quando il file viene scaricato 
+
+    timeout.start(time);
+    loop.exec(); // loop infito
+
+    if (timeout.isActive()) {
+        timeout.stop();
+        return downloadFile.downloadedData(); // scrivo su file
+    }
+    else {
+        qDebug("Error downloading file (timeout)");
+        return QByteArray();
+    }
+    
 }
