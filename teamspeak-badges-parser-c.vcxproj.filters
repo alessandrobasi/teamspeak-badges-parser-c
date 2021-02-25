@@ -8,6 +8,9 @@
     <ClCompile Include="src\TeamspeakBadgesViewer.cpp">
       <Filter>Sorgenti</Filter>
     </ClCompile>
+    <ClCompile Include="src\InfoDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sorgenti">
@@ -31,6 +34,11 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\DownloadManager.h">
@@ -39,9 +47,15 @@
     <QtMoc Include="src\TeamspeakBadgesViewer.h">
       <Filter>Header</Filter>
     </QtMoc>
+    <QtMoc Include="src\InfoDialog.h">
+      <Filter>Header</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="TeamspeakBadgesViewer.ui">
+    <QtUic Include="ui\InfoDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ui\TeamspeakBadgesViewer.ui">
       <Filter>ui</Filter>
     </QtUic>
   </ItemGroup>
@@ -54,8 +68,8 @@
     <ResourceCompile Include="teamspeak-badges-parser-c.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon.ico" />
-    <Image Include="icon.png" />
+    <Image Include="resource\icon.png" />
+    <Image Include="resource\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="TeamspeakBadgesViewer.qrc">

@@ -59,21 +59,30 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <TerminalServerAware>false</TerminalServerAware>
     </Link>
     <ClCompile />
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(ProjectDir)dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <UpdateFileHashes>true</UpdateFileHashes>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
+      <TerminalServerAware>false</TerminalServerAware>
     </Link>
     <ClCompile />
     <PostBuildEvent>
       <Command>xcopy /y /d  "$(ProjectDir)dll\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <UpdateFileHashes>true</UpdateFileHashes>
+    </Manifest>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
@@ -135,8 +144,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <QtUic Include="TeamspeakBadgesViewer.ui" />
+    <QtUic Include="ui\InfoDialog.ui" />
+    <QtUic Include="ui\TeamspeakBadgesViewer.ui" />
     <QtMoc Include="src\TeamspeakBadgesViewer.h" />
+    <ClCompile Include="src\InfoDialog.cpp" />
     <ClCompile Include="src\DownloadManager.cpp" />
     <ClCompile Include="src\TeamspeakBadgesViewer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,14 +156,15 @@
     <QtMoc Include="src\DownloadManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="src\InfoDialog.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="teamspeak-badges-parser-c.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon.ico" />
-    <Image Include="icon.png" />
+    <Image Include="resource\icon.ico" />
+    <Image Include="resource\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="TeamspeakBadgesViewer.qrc" />

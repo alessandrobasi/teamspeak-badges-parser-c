@@ -10,6 +10,9 @@ class TeamspeakBadgesViewer : public QMainWindow
 public:
     TeamspeakBadgesViewer(QWidget *parent = Q_NULLPTR);
 
+public slots:
+    void openInfo();
+
 private:
     Ui::TeamspeakBadgesViewerClass ui;
     const QString urlBadges = "https://badges-content.teamspeak.com/list";

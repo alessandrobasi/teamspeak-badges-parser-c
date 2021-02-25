@@ -5,14 +5,16 @@
 #include <qapplication.h>
 #include "DownloadManager.h"
 #include <QMessageBox>
+#include "InfoDialog.h"
 
 TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
     this->show(); // show gui
-    ui.statusBar->showMessage("Loading...");
+    ui.statusMessage->setText("Loading...");
 
+    
 
     this->getFile(); // download file "list"
     
@@ -23,8 +25,8 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
         return;
     }
     
-    
     // main Window
+    connect(ui.menuInfo, &QMenu::aboutToShow, this, &TeamspeakBadgesViewer::openInfo);
 
     // set QTableWidget rows
     int numBadges = this->badgesInfo.length();
@@ -43,7 +45,13 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     }
     // set message to statusbar
     QString _statusMsg = QString::number(numBadges) + " Badges";
-    ui.statusBar->showMessage(_statusMsg);
+    ui.statusMessage->setText(_statusMsg);
+}
+
+void TeamspeakBadgesViewer::openInfo() {
+    qDebug("Dialog open");
+    InfoDialog about;
+    about.exec();
 }
 
 void TeamspeakBadgesViewer::getFile() {
