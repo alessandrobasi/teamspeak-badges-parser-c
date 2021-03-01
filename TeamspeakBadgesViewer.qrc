@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icon">
+    <file>resource/teamSpeak_logo.png</file>
+    <file>resource/Qt_logo.png</file>
     <file>resource/icon.png</file>
   </qresource>
 </RCC>
