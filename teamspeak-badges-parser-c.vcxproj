@@ -147,6 +147,7 @@
     <QtUic Include="ui\InfoDialog.ui" />
     <QtUic Include="ui\TeamspeakBadgesViewer.ui" />
     <QtMoc Include="src\TeamspeakBadgesViewer.h" />
+    <ClCompile Include="src\HttpHead.cpp" />
     <ClCompile Include="src\InfoDialog.cpp" />
     <ClCompile Include="src\DownloadManager.cpp" />
     <ClCompile Include="src\TeamspeakBadgesViewer.cpp" />
@@ -157,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\InfoDialog.h" />
+    <QtMoc Include="src\HttpHead.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

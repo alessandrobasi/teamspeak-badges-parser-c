@@ -11,6 +11,9 @@
     <ClCompile Include="src\InfoDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\HttpHead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Sorgenti">
@@ -48,6 +51,9 @@
       <Filter>Header</Filter>
     </QtMoc>
     <QtMoc Include="src\InfoDialog.h">
+      <Filter>Header</Filter>
+    </QtMoc>
+    <QtMoc Include="src\HttpHead.h">
       <Filter>Header</Filter>
     </QtMoc>
   </ItemGroup>
