@@ -1,9 +1,8 @@
 #include "TeamspeakBadgesViewer.h"
 #include <QTimer>
 #include <QRegularExpression>
-#include <qapplication.h>
+#include <QPixmap>
 #include "DownloadManager.h"
-#include <QMessageBox>
 #include "InfoDialog.h"
 #include "HttpHead.h"
 
@@ -22,213 +21,231 @@ TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
 
     // connect button and slection
     connect(ui.clearCacheBtn, &QPushButton::clicked, this, &TeamspeakBadgesViewer::clearCache);
-    connect(ui.tabellaBages, &QTableWidget::itemSelectionChanged, this, &TeamspeakBadgesViewer::showBadgeInfo);
-
+    connect(ui.badgesTable, &QTableWidget::itemSelectionChanged, this, &TeamspeakBadgesViewer::showBadgeInfo);
+    
 }
 
+// open dialog box for show info
 void TeamspeakBadgesViewer::openInfo() {
     qDebug("Dialog open");
     InfoDialog about;
     about.exec();
 }
 
-void TeamspeakBadgesViewer::getDownloadedList(QByteArray result) {
-
-    // check if file has data
-    if (result.size() > 0) {
-        if (!this->rawBadges->open(QIODevice::WriteOnly)) {
-            qDebug("Error open file (Write)");
-            return;
-        }
-
-        this->rawBadges->write(result);
-
-        this->rawBadges->close();
-    }
-    else {
-        qDebug() << "0 data recived" ;
-    }
-
-    // open badges file and read it 
-    if (!this->rawBadges->open(QIODevice::ReadOnly)) {
-        qDebug("Error open file (Read)");
-        return;
-    }
-
-    QString dataBadges = QString::fromStdString(this->rawBadges->readAll().toStdString());
-
-    this->rawBadges->close();
-
-
-    // regex magic
-    QRegularExpression expr(this->regExStr,
-        QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption
-    );
-    // generate iterator through RegEx groups
-    QRegularExpressionMatchIterator i = expr.globalMatch(dataBadges);
-
-
-    // initial table rows
-    int num_row = 0;
-
-    // create information list
-    while (i.hasNext()) {
-        // set new row count
-        num_row++;
-        ui.tabellaBages->setRowCount(num_row);
-
-        // get next RegEx group
-        QRegularExpressionMatch match = i.next();
-
-        // TODO: ottimizzare
-        // build list for TableWidgetItem Data
-        QList<QString> temp;
-        temp << match.captured("headid");
-        temp << match.captured("nome");
-        temp << match.captured("url");
-        temp << match.captured("desc");
-
-
-        // get(and download) badge icon
-        QIcon icon_t(this->getBadgeIcon(match.captured("headid"), match.captured("url")));
-        // create item for table
-        QTableWidgetItem* item = new QTableWidgetItem(icon_t, match.captured("nome"));
-        // add data to item
-        item->setData(Qt::UserRole, QVariant(temp));
-        // insert in table
-        ui.tabellaBages->setItem(num_row, 0, item); 
-
-    }
-
-    // set message to statusbar
-    QString _statusMsg = QString::number(num_row) + " Badges";
-    ui.statusMessage->setText(_statusMsg);
-    
-}
-
+// download rawlist badges
 void TeamspeakBadgesViewer::getFile() {
 
-    // inizialize file and dir for badges
-    
-    // create cache dir
-    if (!this->cache->exists()) {
-        if (!this->cache->mkpath(".")) {
-            qDebug("Error cache dir creation");
-            return;
-        }
+    QString lastEdit = QString();
+    QString datetime_en = QString();
+
+    QSqlQuery SqlRawList;
+
+    // get saved (if present) rawlist and lastedit
+    this->storeBadges->getRawList(SqlRawList);
+
+    // if data in database fill variable
+    if (SqlRawList.first()) {
+        lastEdit = SqlRawList.value("lastedit").toString();
+        this->rawList = SqlRawList.value("rawlist").toString();
     }
-    
 
-    // get system time and modified time of the file "list"
-    QDateTime fileTime = this->rawBadges->fileTime(QFileDevice::FileModificationTime).toUTC();
+    // transform string to datetime data
+    QDateTime fileTime = QDateTime::fromString(lastEdit, "yyyy-MM-dd hh:mm:ss");
 
-    QLocale locale = QLocale(QLocale::English);
-    QString datetime_en = "";
-
-    HttpHead* downloadFile = NULL;
-
-    if (!fileTime.isNull()) {
-        datetime_en = locale.toString(fileTime, "ddd, dd MMM yyyy hh:mm:ss") + " GMT";
+    if (fileTime.isValid()) {
+        // set tranlation for name of the day/month
+        datetime_en = QLocale(QLocale::English).toString(fileTime, "ddd, dd MMM yyyy hh:mm:ss") + " GMT";
     }
-    downloadFile = new HttpHead(this->urlBadges, 3000, datetime_en);
-    
 
-    qDebug("fileTime: %s", qPrintable(datetime_en) );
-    qDebug("Try to download badge list");
+    // default for datetime_en is "Mon, 01 Jan 1990 00:00:00 GMT"
+    HttpHead* downloadFile = new HttpHead(this->urlBadges, 3000, datetime_en);
+
+    qDebug("LastEdit badges list: %s", qPrintable(datetime_en));
 
     // event at complete download
     connect(downloadFile, &HttpHead::downloaded, this, &TeamspeakBadgesViewer::getDownloadedList);
-     
-    // start download list file
-    downloadFile->start();
 
-    // end
+    // start download rawList
+    downloadFile->start();
 }
 
-QString TeamspeakBadgesViewer::getBadgeIcon(QString uuid, QString url, QString type) {
-    QFile icon("cache/" + uuid + type);
-    if (!icon.exists() || icon.size() == 0) {
+// extract info from list 
+void TeamspeakBadgesViewer::getDownloadedList(QByteArray result) {
+    // at rawList download
 
-        QByteArray result = this->_timeoutLoop(url + type, icon.fileTime(QFileDevice::FileModificationTime));
+    if (result.size() == 0) { // Error
+        qDebug() << "Error downloading";
+        ui.statusMessage->setText("Error Downloading");
+        return;
+    }
+    else if (result.size() == 1) { // Badge list not modified (so icon too)
+        qDebug() << "not modified";
+        // use saved info in db
+    }
+    else if (result.size() > 1) { // parse and get new icon
+        this->storeBadges->addRawList(result);
+        this->rawList = result.toStdString().c_str();
 
-        if (result.size() > 0) {
-            if (!icon.open(QIODevice::WriteOnly)) {
-                qDebug("Error open icon (Write)");
-                return "";
+        // regex magic
+        QRegularExpression expr(this->regExStr,
+            QRegularExpression::CaseInsensitiveOption | QRegularExpression::MultilineOption
+        );
+        // generate iterator through RegEx groups
+        QRegularExpressionMatchIterator i = expr.globalMatch(this->rawList);
+        int count = 0;
+        // save info in db
+        while (i.hasNext()) {
+
+            // get next RegEx group
+            QRegularExpressionMatch match = i.next();
+            
+            // store to db
+            if (!storeBadges->addBadge(
+                match.captured("guid"),
+                match.captured("nome"),
+                match.captured("url"),
+                match.captured("desc")
+            )) {
+
+                qDebug() << "Error saving badge id " << match.captured("guid");
+                return;
             }
 
-            icon.write(result); // scrivo su file
-
-            icon.close();
         }
-        
+
     }
 
-    return "cache/" + uuid + type;
+    // get result query
+    QSqlQuery Sqlbadges;
+    this->storeBadges->getBadges(Sqlbadges);
+
+    /*
+    0 id
+    1 guid
+    2 name
+    3 url
+    4 desc
+    */
+
+    int x = 0;
+    // populate
+    while (Sqlbadges.next()) {
+        // set number of row for table
+        ui.badgesTable->setRowCount(x+1);
+
+        // create item for table
+        QTableWidgetItem* item = new QTableWidgetItem(Sqlbadges.value("name").toString());
+
+        // add data to item
+        item->setData(Qt::UserRole, Sqlbadges.value("guid"));
+
+
+        QSqlQuery badgeData;
+        this->storeBadges->getGuidData(Sqlbadges.value("guid").toString(), badgeData);
+
+        /*
+        0 guid
+        1 _64png
+        2 lastedit
+        */
+
+        if (badgeData.first()) {
+            QPixmap _pixmap;
+            _pixmap.loadFromData(badgeData.value("_64png").toByteArray());
+
+            item->setIcon(QIcon(_pixmap));
+        }
+        else {
+            // TODO: istanziare i puntatori di downloadIcon in una lista???
+            HttpHead* downloadIcon = new HttpHead(Sqlbadges.value("url").toString() + "_64.png", 3000);
+            connect(downloadIcon, &HttpHead::downloaded, this, [=](QByteArray resultData) {
+                this->getDownloadedBadgeIcon(item, resultData);
+                });
+            downloadIcon->start();
+        }
+
+        badgeData.clear();
+
+        // insert in table
+        ui.badgesTable->setItem(x, 0, item);
+        x++;
+    }
+
+    // set message to statusbar
+    ui.statusMessage->setText(QString::number(x) + " Badges");
 }
 
+// on click badges
 void TeamspeakBadgesViewer::showBadgeInfo() {
+    QString url, desc;
 
-    QTableWidgetItem* item = ui.tabellaBages->selectedItems().at(0);
-    QVariantList r_badge = item->data(Qt::UserRole).toList();
+    QSqlQuery info;
 
-    QString uuid = r_badge.at(0).toString();
-    QString nome = r_badge.at(1).toString();
-    QString url  = r_badge.at(2).toString();
-    QString desc = r_badge.at(3).toString();
+    QTableWidgetItem* item = ui.badgesTable->selectedItems().at(0);
+    
+    QString guid = item->data(Qt::UserRole).toString();
+    QString name = item->text();
+    QPixmap icon = item->icon().pixmap(64, 64);
 
-    QPixmap icon(this->getBadgeIcon(uuid, url));
+    this->storeBadges->getInfo(guid, info);
+
+    if (info.first()) {
+         url  = info.value("url").toString();
+         desc = info.value("desc").toString();
+    }
+
     ui.iconaBadge->setPixmap(icon);
-    ui.nomeBadge->setText(nome);
+    ui.nomeBadge->setText(name);
+
     ui.descBadge->setText(desc);
-    ui.uuidText->setText(uuid);
+    ui.uuidText->setText(guid);
 
     ui.svgUrl->setText("SVG: <a href='" + url + ".svg" + "'><span style='text-decoration:none;color:#3c76cc;'>[...].svg" + "</span></a>");
     ui.detailsSvgUrl->setText("Details SVG: <a href='" + url + "_details.svg" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_details.svg" + "</span></a>");
-    ui.pngUrl->setText("PNG: <a href='" + url +
-        "_16.png" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_16.png" + "</span></a>");
+    ui.pngUrl->setText("PNG: <a href='" + url + "_16.png" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_16.png" + "</span></a>");
     ui.detailsPngUrl->setText("Details PNG: <a href='" + url + "_64.png" + "'><span style='text-decoration:none;color:#3c76cc;'>[...]_64.png" + "</span></a>");
 
 }
 
+// clear all content
 void TeamspeakBadgesViewer::clearCache() {
-    
-    QDir cache("cache");
-    QFile list("list");
 
-    if (!cache.removeRecursively()) {
-        qDebug("Error cleaning cache dir");
-    }
+    QFile dbstore(this->databaseName);
 
-    if (!list.remove()) {
+    if (!dbstore.remove()) {
         qDebug("Error removing list file");
     }
 
-    QApplication::quit();
+    qApp->quit();
 }
 
-//TODO: move to thread
-QByteArray TeamspeakBadgesViewer::_timeoutLoop(QUrl fileToDownload, QDateTime modifiedTime, int time) {
-
-    // creo un loop per dare tempo al network di scaricare il file
-    QEventLoop loop;
-    QTimer timeout;
-    timeout.setSingleShot(true);
-    connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit); // avviene in caso di timeout del network
-
-    //HttpHead downloadFile(fileToDownload, "Mon, 01 Jan 1990 00:00:00 GMT", time); // avvio il download
-    //connect(&downloadFile, SIGNAL(downloaded()), &loop, SLOT(quit())); // avviene quando il file viene scaricato 
-
-    timeout.start(time);
-    loop.exec(); // loop infito
-
-    if (timeout.isActive()) {
-        timeout.stop();
-        //return downloadFile.downloadedData(); // scrivo su file
-    }
-    else {
-        qDebug("Error downloading file (timeout)");
-        return QByteArray();
-    }
+// on downloaded icon
+void TeamspeakBadgesViewer::getDownloadedBadgeIcon(QTableWidgetItem* item, QByteArray rawIcon) {
     
+    qDebug() << item->text() << " " << rawIcon.size();
+
+
+    if (rawIcon.size() == 0) { // Error
+        qDebug() << "Error downloading";
+        ui.statusMessage->setText("Error Downloading icon");
+        return;
+    }
+    else if (rawIcon.size() == 1) { // Icon not modified 
+        qDebug() << "not modified";
+    }
+    else if (rawIcon.size() > 1) { // get new icon
+        
+        // save to db
+        if (!this->storeBadges->addIcon(item->data(Qt::UserRole).toString(), rawIcon)) {
+            qDebug() << "Error saving icon for badge: " << item->data(Qt::UserRole).toString();
+            return;
+        }
+
+        // set icon
+        QPixmap _pixmap;
+        _pixmap.loadFromData(rawIcon);
+
+        item->setIcon(QIcon(_pixmap));
+
+    }
 }

@@ -86,7 +86,7 @@
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2019_64</QtInstall>
-    <QtModules>core;gui;network;uitools;widgets</QtModules>
+    <QtModules>concurrent;core;gui;network;sql;uitools;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
     <QtDeploy>true</QtDeploy>
     <QMakeExtraArgs>
@@ -147,16 +147,14 @@
     <QtUic Include="ui\InfoDialog.ui" />
     <QtUic Include="ui\TeamspeakBadgesViewer.ui" />
     <QtMoc Include="src\TeamspeakBadgesViewer.h" />
+    <ClCompile Include="src\sqlite\Sql.cpp" />
     <ClCompile Include="src\HttpHead.cpp" />
     <ClCompile Include="src\InfoDialog.cpp" />
-    <ClCompile Include="src\DownloadManager.cpp" />
     <ClCompile Include="src\TeamspeakBadgesViewer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\DownloadManager.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="src\sqlite\Sql.h" />
     <QtMoc Include="src\InfoDialog.h" />
     <QtMoc Include="src\HttpHead.h" />
     <ClInclude Include="resource.h" />
@@ -170,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="TeamspeakBadgesViewer.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sqldrivers\qsqlited.dll" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

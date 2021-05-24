@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\DownloadManager.cpp">
-      <Filter>Sorgenti</Filter>
-    </ClCompile>
     <ClCompile Include="src\TeamspeakBadgesViewer.cpp">
       <Filter>Sorgenti</Filter>
     </ClCompile>
@@ -12,6 +9,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\HttpHead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sqlite\Sql.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,9 +44,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="src\DownloadManager.h">
-      <Filter>Header</Filter>
-    </QtMoc>
     <QtMoc Include="src\TeamspeakBadgesViewer.h">
       <Filter>Header</Filter>
     </QtMoc>
@@ -69,6 +66,9 @@
     <ClInclude Include="resource.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="src\sqlite\Sql.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="teamspeak-badges-parser-c.rc" />
@@ -81,5 +81,8 @@
     <QtRcc Include="TeamspeakBadgesViewer.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sqldrivers\qsqlited.dll" />
   </ItemGroup>
 </Project>
