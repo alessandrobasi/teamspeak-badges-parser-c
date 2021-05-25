@@ -28,8 +28,6 @@ private:
     QString rawList = QString();
 
     QUrl urlBadges = QUrl("https://badges-content.teamspeak.com/list");
-    [[deprecated("da rimuovere, rimpiazzato con sqlite")]] //TODO: da rimuovere, rimpiazzato con sqlite
-    QList<QList<QString>> badgesInfo;
     
     typedef struct _BADGE {
         int id;
