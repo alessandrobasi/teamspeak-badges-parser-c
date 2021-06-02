@@ -149,7 +149,7 @@ void TeamspeakBadgesViewer::getDownloadedList(QByteArray result) {
         2 lastedit
         */
 
-        if (badgeData.first()) {
+        if (badgeData.next()) {
             QPixmap _pixmap;
             _pixmap.loadFromData(badgeData.value("_64png").toByteArray());
 
