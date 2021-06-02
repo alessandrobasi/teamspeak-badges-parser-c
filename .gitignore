@@ -341,3 +341,6 @@ healthchecksdb
 /list
 cache/
 bin/
+
+# custom
+*.db
