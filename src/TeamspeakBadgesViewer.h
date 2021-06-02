@@ -2,10 +2,9 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QUrl>
-#include <QDir>
-#include <QFile>
-#include <QtConcurrent>
 #include "ui_TeamspeakBadgesViewer.h"
+#include "InfoDialog.h"
+#include "HttpHead.h"
 #include "sqlite/Sql.h"
 
 class TeamspeakBadgesViewer : public QMainWindow
@@ -29,22 +28,11 @@ private:
 
     QUrl urlBadges = QUrl("https://badges-content.teamspeak.com/list");
     
-    typedef struct _BADGE {
-        int id;
-        QString guid;
-        QString name;
-        QString url;
-        QString desc;
-    } badge;
-    QList<badge> badges;
-    
-    
+    // https://regex101.com/r/rnyijt/1
     QString regExStr = "^\\$(?P<guid>[\\w\\d-]+).(.|\\n)(?P<nome>.+)..(?P<url>https://[\\w\\-\\.\\/]+)..(?P<desc>\\w.*)\\(.+$";
 
 
     void getFile();
-    
     void showBadgeInfo();
     void clearCache();
-    QByteArray _timeoutLoop(QUrl fileToDownload, QDateTime modifiedTime, int time = 3000);
 };

@@ -1,10 +1,7 @@
 #include "TeamspeakBadgesViewer.h"
-#include <QTimer>
 #include <QRegularExpression>
 #include <QPixmap>
-#include "DownloadManager.h"
-#include "InfoDialog.h"
-#include "HttpHead.h"
+
 
 TeamspeakBadgesViewer::TeamspeakBadgesViewer(QWidget *parent)
     : QMainWindow(parent)

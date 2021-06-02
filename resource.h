@@ -2,9 +2,7 @@
 // File di inclusione generato con Microsoft Visual C++.
 // Utilizzato da teamspeak-badges-parser-c.rc
 //
-#define IDI_ICON2                       105
 #define IDI_ICON1                       105
-#define IDI_ICON3                       108
 
 // Next default values for new objects
 // 

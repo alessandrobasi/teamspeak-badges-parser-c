@@ -76,13 +76,17 @@
   <ItemGroup>
     <Image Include="resource\icon.png" />
     <Image Include="resource\icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="TeamspeakBadgesViewer.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
+    <Image Include="ui\resource\icon.ico" />
+    <Image Include="ui\resource\icon.png" />
+    <Image Include="ui\resource\Qt_logo.png" />
+    <Image Include="ui\resource\teamSpeak_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sqldrivers\qsqlited.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="ui\TeamspeakBadgesViewer.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

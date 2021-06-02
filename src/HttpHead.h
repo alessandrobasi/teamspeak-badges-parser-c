@@ -1,6 +1,4 @@
-#include <QObject>
 #include <QThread>
-#include <QNetworkReply>
 #include <QNetworkReply>
 #include <QEventloop>
 #include <QTimer>

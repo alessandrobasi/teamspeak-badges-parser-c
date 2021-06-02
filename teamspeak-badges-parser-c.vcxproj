@@ -165,12 +165,16 @@
   <ItemGroup>
     <Image Include="resource\icon.ico" />
     <Image Include="resource\icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="TeamspeakBadgesViewer.qrc" />
+    <Image Include="ui\resource\icon.ico" />
+    <Image Include="ui\resource\icon.png" />
+    <Image Include="ui\resource\Qt_logo.png" />
+    <Image Include="ui\resource\teamSpeak_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="sqldrivers\qsqlited.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="ui\TeamspeakBadgesViewer.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
