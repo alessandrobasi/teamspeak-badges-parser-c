@@ -83,6 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="sqldrivers\qsqlited.dll" />
+    <None Include=".gitignore" />
+    <None Include=".gitattributes" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="ui\TeamspeakBadgesViewer.qrc">

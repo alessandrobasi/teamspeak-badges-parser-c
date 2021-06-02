@@ -123,14 +123,14 @@ border-radius: 5px;
     <attribute name="horizontalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>300</number>
+    </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>300</number>
     </attribute>
     <attribute name="horizontalHeaderHighlightSections">
      <bool>false</bool>
-    </attribute>
-    <attribute name="horizontalHeaderMinimumSectionSize">
-     <number>300</number>
     </attribute>
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>
@@ -138,14 +138,14 @@ border-radius: 5px;
     <attribute name="verticalHeaderCascadingSectionResizes">
      <bool>false</bool>
     </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>50</number>
+    </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>50</number>
     </attribute>
     <attribute name="verticalHeaderHighlightSections">
      <bool>true</bool>
-    </attribute>
-    <attribute name="verticalHeaderMinimumSectionSize">
-     <number>50</number>
     </attribute>
     <row/>
     <column/>
@@ -472,7 +472,7 @@ QLabel::!hover{
      </rect>
     </property>
     <property name="text">
-     <string>Badges will update after 7 days that the file was created</string>
+     <string>Badges will update automatically</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

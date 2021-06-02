@@ -171,6 +171,10 @@
     <Image Include="ui\resource\teamSpeak_logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
     <None Include="sqldrivers\qsqlited.dll" />
   </ItemGroup>
   <ItemGroup>
