@@ -1,13 +1,13 @@
 #include "HttpHead.h"
 
 
-HttpHead::HttpHead(QUrl url, int _time, QString modifiedSince, QObject* parent) : QThread(parent)
+HttpHead::HttpHead(QUrl _url, int _time, QString _modifiedSince, QObject* parent) : QThread(parent)
 {
 	// save parameter to class
 	this->time = _time;
-	this->url = url;
-	if (!modifiedSince.isEmpty()) {
-		this->modifiedSince = modifiedSince;
+	this->url = _url;
+	if (!_modifiedSince.isEmpty()) {
+		this->modifiedSince = _modifiedSince;
 	}
 
 }
@@ -29,7 +29,7 @@ void HttpHead::run() {
 	// event for network timeout
 	connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
 
-	// complited download
+	// event for complited download
 	connect(
 		&m_WebCtrl, SIGNAL(finished(QNetworkReply*)),
 		this, SLOT(fileDownloaded(QNetworkReply*))
@@ -41,7 +41,7 @@ void HttpHead::run() {
 	// send network request
 	m_WebCtrl.get(request);
 
-	// sleep
+	// start time for timeout request
 	timeout.start(this->time);
 	loop.exec(); // loop
 	
@@ -54,32 +54,29 @@ void HttpHead::run() {
 		qDebug("Error downloading file (timeout)");
 		m_WebCtrl.deleteLater();
 	}
-
-	//end
 }
 
 void HttpHead::fileDownloaded(QNetworkReply* pReply) {
 	QVariant status = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-	qDebug() << "Download end!";
+	
 
 	switch (status.toInt()) {
-		case 200:
-			qDebug() << "File modified";
+		case 200: // file modified, new content to download
+			qDebug() << "HttpHead: File modified";
 			this->m_DownloadedData = pReply->readAll();
 			break;
-		case 304:
-			qDebug() << "File NOT modified";
+		case 304:// file not modified, no content to download
+			qDebug() << "HttpHead: File NOT modified";
+			this->m_DownloadedData = QByteArray(1,'1');
 			break;
-		default:
-			qDebug() << "HTTP code error: " << status.toString();
+		default:// other http error
+			qDebug() << "HttpHead: HTTP code "<< status.toInt() <<": " << status.toString();
 			break;
 	}
 
 	pReply->deleteLater();
 
-	qDebug() << "inizio emit ";
 	// data if downloaded | null otherwise
 	emit downloaded(this->m_DownloadedData);
-	qDebug() << "fine emit ";
 	
 }

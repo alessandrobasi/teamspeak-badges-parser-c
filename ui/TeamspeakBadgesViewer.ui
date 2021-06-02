@@ -26,7 +26,7 @@
    <string>Teamspeak Badges Parser</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../TeamspeakBadgesViewer.qrc">
+   <iconset resource="TeamspeakBadgesViewer.qrc">
     <normaloff>:/icon/resource/icon.png</normaloff>:/icon/resource/icon.png</iconset>
   </property>
   <property name="styleSheet">
@@ -52,7 +52,7 @@ border-radius: 5px;
 text-decoration: none;
 }</string>
    </property>
-   <widget class="QTableWidget" name="tabellaBages">
+   <widget class="QTableWidget" name="badgesTable">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -472,7 +472,7 @@ QLabel::!hover{
      </rect>
     </property>
     <property name="text">
-     <string>Badges will update after 7 days that the file was created</string>
+     <string>Badges will update automatically</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -497,7 +497,7 @@ QLabel::!hover{
   </widget>
  </widget>
  <resources>
-  <include location="../TeamspeakBadgesViewer.qrc"/>
+  <include location="TeamspeakBadgesViewer.qrc"/>
  </resources>
  <connections/>
 </ui>

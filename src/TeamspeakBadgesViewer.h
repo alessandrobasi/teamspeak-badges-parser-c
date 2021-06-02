@@ -2,9 +2,10 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QUrl>
-#include <QDir>
-#include <QFile>
 #include "ui_TeamspeakBadgesViewer.h"
+#include "InfoDialog.h"
+#include "HttpHead.h"
+#include "sqlite/Sql.h"
 
 class TeamspeakBadgesViewer : public QMainWindow
 {
@@ -12,23 +13,26 @@ class TeamspeakBadgesViewer : public QMainWindow
 
 public:
     TeamspeakBadgesViewer(QWidget *parent = Q_NULLPTR);
+    
 
 public slots:
     void openInfo();
     void getDownloadedList(QByteArray result);
+    void getDownloadedBadgeIcon(QTableWidgetItem* item, QByteArray rawIcon);
 
 private:
     Ui::TeamspeakBadgesViewerClass ui;
+    QString databaseName = "badgesData.db";
+    Sql *storeBadges = new Sql(databaseName);
+    QString rawList = QString();
+
     QUrl urlBadges = QUrl("https://badges-content.teamspeak.com/list");
-    QList<QList<QString>> badgesInfo;
-    QDir* cache = new QDir("cache");
-    QFile* rawBadges = new QFile("list");
-    QString regExStr = "^\\$(?P<headid>[\\w\\d-]+).(.|\\n)(?P<nome>.+)..(?P<url>https://[\\w\\-\\.\\/]+)..(?P<desc>\\w.*)\\(.+$";
+    
+    // https://regex101.com/r/rnyijt/1
+    QString regExStr = "^\\$(?P<guid>[\\w\\d-]+).(.|\\n)(?P<nome>.+)..(?P<url>https://[\\w\\-\\.\\/]+)..(?P<desc>\\w.*)\\(.+$";
 
 
     void getFile();
-    QString getBadgeIcon(QString uuid, QString url, QString type = "_64.png");
     void showBadgeInfo();
     void clearCache();
-    QByteArray _timeoutLoop(QUrl fileToDownload, QDateTime modifiedTime, int time = 3000);
 };

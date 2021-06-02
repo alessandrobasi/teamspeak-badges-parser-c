@@ -51,8 +51,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,5,0,0
- PRODUCTVERSION 1,5,0,0
+ FILEVERSION 1,6,0,0
+ PRODUCTVERSION 1,6,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,12 +69,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "alessandrobasi.it"
             VALUE "FileDescription", "Show Teamspeak Badges"
-            VALUE "FileVersion", "1.5.0.0"
+            VALUE "FileVersion", "1.6.0.0"
             VALUE "InternalName", "Teamspeak Badge Parser"
             VALUE "LegalCopyright", "Copyright (C) 2021"
-            VALUE "OriginalFilename", "Teamspeak Badge Parser"
-            VALUE "ProductName", "Teamspeak Badge Parser"
-            VALUE "ProductVersion", "1.5.0.0"
+            VALUE "OriginalFilename", "Teamspeak Badges Parser"
+            VALUE "ProductName", "Teamspeak Badges Parser"
+            VALUE "ProductVersion", "1.6.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -91,7 +91,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "resource\\icon.ico"
+IDI_ICON1               ICON                    "ui\\resource\\icon.ico"
 
 #endif    // Italiano (Italia) resources
 /////////////////////////////////////////////////////////////////////////////
