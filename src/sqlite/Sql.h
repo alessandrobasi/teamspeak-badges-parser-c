@@ -6,6 +6,7 @@ class Sql {
 
 public:
 	Sql(QString dbname);
+	void close();
 	bool addBadge(QString guid, QString name, QString url, QString desc);
 	bool addIcon(QString guid, QByteArray _64png);
 	void addRawList(QByteArray rawList);

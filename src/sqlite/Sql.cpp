@@ -57,6 +57,10 @@ Sql::Sql(QString dbname) {
 	);
 }
 
+void Sql::close() {
+	this->db.close();
+}
+
 bool Sql::addBadge(QString guid, QString name, QString url, QString desc) {
 
 	if (this->db.transaction()) {

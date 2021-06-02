@@ -209,6 +209,8 @@ void TeamspeakBadgesViewer::clearCache() {
 
     QFile dbstore(this->databaseName);
 
+    this->storeBadges->close();
+
     if (!dbstore.remove()) {
         qDebug("Error removing list file");
     }
